@@ -1,0 +1,27 @@
+node main.js MONDay '0100'
+node main.js MONDay '1100hrs'
+node main.js MONDay '2100'
+
+
+node main.js tUeSDay '0100am'
+node main.js Tuesday 1000
+node main.js tuesday 1900
+node main.js tuesday 1900hrs
+
+
+node main.js wednesDay '0700am'
+node main.js Wednesday 1400
+node main.js WEDNESDAY 700pm
+node main.js wednesday '2200 hrs'
+
+
+node main.js thursDay '0900'
+node main.js Thursday 1400
+node main.js THURSDAY 1901hrs
+
+
+node main.js friDay '0900'
+node main.js Friday 1400
+node main.js FRIDAY 1901pm
+
+
