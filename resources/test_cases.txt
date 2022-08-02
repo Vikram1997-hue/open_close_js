@@ -22,6 +22,14 @@ node main.js THURSDAY 1901hrs
 
 node main.js friDay '0900'
 node main.js Friday 1400
-node main.js FRIDAY 1901pm
+node main.js FRIDAY 1901
 
 
+node main.js saturDAY 1901
+node main.js saturDAY 0901
+node main.js saturDAY 1403
+
+
+node main.js sunDAY 1901
+node main.js SunDAY 0901
+node main.js Sunday 1403

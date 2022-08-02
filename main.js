@@ -1,6 +1,6 @@
 const timings = {
-    opens: 1000,
-    closes: 1900
+    opens: 1030, //1000
+    closes: 1900//1950
 }
 const helper = require('./resources/helpers')
 // console.log(helper)

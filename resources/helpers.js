@@ -10,15 +10,23 @@ function openOrClosed(inputDate, timings) {
     //weekdays
     if((inputDate.getDay() >= 1 && inputDate.getDay() <=5)) {  
 
+        if((inputDate.getHours() == Math.floor(timings.opens/100)) && inputDate.getMinutes() < timings.opens%100) {
+            console.log("CLOSED!")
+            console.log(getClosestOpening(inputDate, timings))
+            process.exit(0)
+        }
+        
+        if(inputDate.getHours() == Math.floor(timings.closes/100) && inputDate.getMinutes() <= timings.closes%100) {
+            console.log("OPEN!")
+            process.exit(0)
+        }
+        
         if(inputDate.getHours() >= Math.floor(timings.opens/100) && inputDate.getHours() < Math.floor(timings.closes/100)) {
             console.log("OPEN!")
             process.exit(0) //go to closes soon subroutine
         }
 
-        if(inputDate.getHours() == Math.floor(timings.closes/100) && inputDate.getMinutes() <= timings.closes%100) {
-            console.log("OPEN!")
-            process.exit(0)
-        }
+        
 
         console.log("CLOSED!")
         let displayMsg = getClosestOpening(inputDate, timings)
@@ -53,8 +61,23 @@ function getClosestOpening(inputDate, timings) {
         }
     }
     else if(currentDOW == 0) { //sunday case
-        if(inputDate.getHours()<Math.floor(timings.opens/100)) {
-            let msg = "Opens in 1 day";
+        if(inputDate.getHours()<Math.floor(timings.opens/100) || (inputDate.getHours()==Math.floor(timings.opens/100) && inputDate.getMinutes()<(timings.opens%100))) {
+            let msg = "Opens in 1 day ";
+            // console.log("minutes and hours: ",inputDate.getHours(), inputDate.getMinutes())
+            let noOfHours = Math.floor(timings.opens/100) - inputDate.getHours()
+            // msg = msg + noOfHours + " hours "
+            let noOfMinutes = 0;
+            if(timings.opens%100 != inputDate.getMinutes()) {
+                // console.log("in hereee")
+                if(inputDate.getMinutes() < timings.opens%100)
+                    noOfMinutes = timings.opens%100 - inputDate.getMinutes()
+                else {
+                    noOfHours--;
+                    noOfMinutes = 60 - inputDate.getMinutes()
+                }
+            }
+            if(noOfHours!=0 || noOfMinutes!=0) 
+                msg = msg + noOfHours + " hours " + noOfMinutes + " minutes"
             return msg
         }
 
@@ -85,8 +108,22 @@ function getClosestOpening(inputDate, timings) {
     
         // console.log("rock")
         let opensIn = closestOpening - inputDate
-        let opensInMsg = (opensIn / (24 * 3600 * 1000)) > 1 ? Math.floor(opensIn / (24 * 3600 * 1000)) + " days" : (opensIn / (3600 * 1000)).toFixed(2) + " hours" //FIX
-        let msg = "Opens in " + opensInMsg
+        let msg = "Opens in "
+        let noOfDays = 0
+        if((opensIn / (24 * 3600 * 1000)) > 1) {
+            noOfDays = Math.floor(opensIn / (24 * 3600 * 1000))
+            msg = msg + noOfDays + " days "
+        }
+        opensIn -= noOfDays*24*3600*1000;
+        let noOfHours = Math.floor(opensIn/(3600*1000))
+        msg = msg + noOfHours + " hours ";
+        if(noOfHours != opensIn/(3600*1000)) {
+            opensIn -= noOfHours*3600*1000;
+            msg = msg + (opensIn/(60*1000)) + " minutes"
+        }
+        // msg = msg + (opensIn/(3600*1000)).toFixed(2) + " hours"
+        
+        
         return msg
     }
 
@@ -100,9 +137,15 @@ function getClosestOpening(inputDate, timings) {
 
             // console.log("stone")
         let opensIn = closestOpening - inputDate
-        let opensInMsg = (opensIn / (3600 * 1000));
+        let noOfHours = (opensIn / (3600 * 1000));
 
-        let msg = "Opens in " + opensInMsg.toFixed(2) + " hours"
+        let msg = "Opens in " + Math.floor(noOfHours) + " hours "
+        if(noOfHours != Math.floor(noOfHours)) {
+            opensIn -= Math.floor(noOfHours)*3600*1000;
+            // console.log(opensIn)
+            let noOfMinutes = opensIn/(60*1000)
+            msg = msg + noOfMinutes + " minutes"
+        }
         return msg
     }
 }
