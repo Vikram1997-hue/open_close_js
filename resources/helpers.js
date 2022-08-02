@@ -1,3 +1,14 @@
+function notForLong(inputDate, timings) {
+    
+    //let's use Date for a change
+    let closingTime = new Date(inputDate.getTime())
+    closingTime.setHours(Math.floor(timings.closes/100), timings.closes%100);
+    let difference = closingTime - inputDate;
+    if(difference <= 1000*3600*0.5) {
+        console.log("Closing soon -- in " + difference/(1000*60) + " minutes")
+    }
+}
+
 function openOrClosed(inputDate, timings) {
     
     //edge case: weekends
@@ -10,24 +21,25 @@ function openOrClosed(inputDate, timings) {
     //weekdays
     if((inputDate.getDay() >= 1 && inputDate.getDay() <=5)) {  
 
-        if((inputDate.getHours() == Math.floor(timings.opens/100)) && inputDate.getMinutes() < timings.opens%100) {
-            console.log("CLOSED!")
-            console.log(getClosestOpening(inputDate, timings))
+        if((inputDate.getHours() == Math.floor(timings.opens/100)) && inputDate.getMinutes() >= timings.opens%100) {
+            console.log("OPEN!")
+            notForLong(inputDate, timings)
             process.exit(0)
         }
         
         if(inputDate.getHours() == Math.floor(timings.closes/100) && inputDate.getMinutes() <= timings.closes%100) {
             console.log("OPEN!")
+            notForLong(inputDate, timings)
             process.exit(0)
         }
         
-        if(inputDate.getHours() >= Math.floor(timings.opens/100) && inputDate.getHours() < Math.floor(timings.closes/100)) {
+        if((inputDate.getHours() > Math.floor(timings.opens/100) || (inputDate.getHours() == Math.floor(timings.opens/100) && inputDate.getMinutes>=timings.opens%100)) && inputDate.getHours() < Math.floor(timings.closes/100)) {
             console.log("OPEN!")
+            notForLong(inputDate, timings)
             process.exit(0) //go to closes soon subroutine
         }
 
         
-
         console.log("CLOSED!")
         let displayMsg = getClosestOpening(inputDate, timings)
         console.log(displayMsg)
